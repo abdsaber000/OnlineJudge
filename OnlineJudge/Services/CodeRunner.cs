@@ -11,10 +11,12 @@ namespace OnlineJudge.Services
     {
         ProcessStartInfo psi = new ProcessStartInfo();
         private readonly string _fileName;
+        private readonly string _filePath;
         private string stdError = "";
-        public CodeRunner(string fileName = "temp")
+        public CodeRunner(string fileName  , string filePath)
         {
             _fileName = fileName;
+            _filePath = filePath;
             InitializeProcessInfo();
         }
         private void InitializeProcessInfo()
@@ -25,27 +27,15 @@ namespace OnlineJudge.Services
             psi.RedirectStandardError = true;
         }
         
-        private void ExecuteProcess()
-        {
-            Process p = Process.Start(psi);
-            string strOutput = p.StandardOutput.ReadToEnd();
-            string strError = p.StandardError.ReadToEnd();
-            p.WaitForExit();
-            if (strError.Length > 0)
-            {
-                stdError = strError;
-            }
-            Console.WriteLine(strError);
-        }
+        
         private string PrepareCommand(string Command)
         {
-            var ChangeDirectoryCommand = "cd " + Directory.GetCurrentDirectory() + "\\Services";
+            var ChangeDirectoryCommand = "cd " + _filePath;
             var MergedCommand = ChangeDirectoryCommand + " && " + Command;
             return "/C " + MergedCommand;
         }
         private void Build() {
             var BuildCommand = $"g++ {_fileName}.cpp -o {_fileName}";
-            //psi.Arguments = PrepareCommand(BuildCommand);
             BuildCommand = PrepareCommand(BuildCommand);
             ProcessHandler.Run(BuildCommand);
             if(ProcessHandler.LastError != "")
@@ -57,7 +47,6 @@ namespace OnlineJudge.Services
 
         private void Run() {
             var RunCommand = $"{_fileName}.exe";
-            //psi.Arguments = PrepareCommand(RunCommand);
             RunCommand = PrepareCommand(RunCommand);
             ProcessHandler.Run(RunCommand);
             if (ProcessHandler.LastError != "")

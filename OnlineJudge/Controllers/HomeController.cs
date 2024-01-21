@@ -24,6 +24,7 @@ namespace OnlineJudge.Controllers
             TestRunner test = new TestRunner("SAfd", "sdf", "SDf");
             test.MakeDir();
             test.MakeFiles();
+            test.WriteData();
             return View();
         }
 
