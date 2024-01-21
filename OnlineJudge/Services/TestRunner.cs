@@ -1,4 +1,6 @@
-﻿namespace OnlineJudge.Services
+﻿using Microsoft.AspNetCore.Components.Forms;
+
+namespace OnlineJudge.Services
 {
     public class TestRunner
     {
@@ -12,6 +14,12 @@
             this.code = code;
             this.inputTest = inputTest;
             this.expectedOutput = expectedOutput;
+            AppendRandomNumber();
+        }
+        private void AppendRandomNumber()
+        {
+            Random random = new Random();
+            executionFolder += random.Next(1, 10).ToString();
         }
 
         public void MakeDir()
@@ -35,16 +43,14 @@
 
         public void WriteData()
         {
-            string WriteSourceCommand = $"echo \"{code}\" > temp.cpp";
-            string WriteInputCommand = $"echo \"{inputTest}\" > input.txt";
-            string WriteOutputExpectedCommand 
-                = $"echo \"{expectedOutput}\" > outputExp.txt";
-
-            ProcessHandler.Run(PrepareCommand(WriteSourceCommand));
-            ProcessHandler.Run(PrepareCommand(WriteInputCommand));
-            ProcessHandler.Run(PrepareCommand(WriteOutputExpectedCommand));
+            string sourcePath = executionFolder + "\\temp.cpp";
+            string inputPath = executionFolder + "\\input.txt";
+            string outputPath = executionFolder + "\\outputExp.txt";
+            File.WriteAllText(sourcePath, code);
+            File.WriteAllText(inputPath, inputTest);
+            File.WriteAllText(outputPath, expectedOutput);
         }
-
+        
         public void RunCode()
         {
             CodeRunner codeRunner = new CodeRunner("temp", executionFolder);

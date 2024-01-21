@@ -18,13 +18,9 @@ namespace OnlineJudge.Controllers
 
         public IActionResult Index()
         {
-            CodeRunner code = new CodeRunner();
-            code.BuildAndRun();
-            ViewBag.Vredict = code.GetError();
-            TestRunner test = new TestRunner("SAfd", "sdf", "SDf");
-            test.MakeDir();
-            test.MakeFiles();
-            test.WriteData();
+       
+          
+            ViewBag.Vredict = "test";
             return View();
         }
 

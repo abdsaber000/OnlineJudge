@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlineJudge.Data;
 using OnlineJudge.Models;
+using OnlineJudge.Services;
 
 namespace OnlineJudge.Controllers
 {
@@ -49,6 +50,28 @@ namespace OnlineJudge.Controllers
             return View();
         }
 
+        private  void RunSubmission(ref Submission submission)
+        {
+            Problem problem = _context.Problem.Find(submission.ProblemId);
+            if(problem == null)
+            {
+
+                return ;
+            }
+
+            string input = problem.InputTest;
+            string output = problem.ExpectedOutput;
+            string code = submission.Code;
+            TestRunner testRunner = new TestRunner(code, input, output);
+            testRunner.MakeDir();
+            testRunner.MakeFiles();
+            testRunner.WriteData();
+            testRunner.RunCode();
+            submission.Vredict = testRunner.Vredict;
+
+        }
+
+
         // POST: Submissions/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -59,6 +82,7 @@ namespace OnlineJudge.Controllers
             if (ModelState.IsValid)
             {
                 submission.Vredict = "In queue";
+                RunSubmission(ref submission);
                 _context.Add(submission);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -87,7 +111,7 @@ namespace OnlineJudge.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ProblemId,Code,Vredict")] Submission submission)
+        public async Task<IActionResult> Edit(int id, Submission submission)
         {
             if (id != submission.Id)
             {
