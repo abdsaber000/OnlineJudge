@@ -1,4 +1,4 @@
-﻿@model IEnumerable<OnlineJudge.Models.Submission>
+﻿@model IEnumerable<SubmissionViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -16,7 +16,7 @@
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Code)
+                @Html.DisplayNameFor(model => model.ProblemTitle)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Vredict)
@@ -31,15 +31,14 @@
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Code)
+                <a asp-controller="Problems" asp-action="Details" asp-route-id="@item.ProblemId">@Html.DisplayFor(modelItem => item.ProblemTitle)</a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Vredict)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+           
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
             </td>
         </tr>
 }

@@ -23,7 +23,22 @@ namespace OnlineJudge.Controllers
         // GET: Submissions
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Submission.ToListAsync());
+            var submissions = _context.Submission.ToList();
+            var problems = _context.Problem.ToList();
+
+            var result = submissions.Join(problems,
+                submission => submission.ProblemId,
+                problem => problem.Id,
+                (submission, problem) =>
+                new SubmissionViewModel
+                {
+                    Id = submission.Id,
+                    ProblemId = submission.ProblemId,
+                    ProblemTitle = problem.Title,
+                    Vredict = submission.Vredict,
+
+                });
+            return View(result);
         }
 
         // GET: Submissions/Details/5

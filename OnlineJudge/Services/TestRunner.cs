@@ -76,7 +76,7 @@ namespace OnlineJudge.Services
             }
             else
             {
-                Vredict = "Wrong";
+                Vredict = "Wrong Answer";
             }
 
         }
@@ -112,6 +112,10 @@ namespace OnlineJudge.Services
 
             return ((file1byte - file2byte) == 0);
         }
-
+        public void Clean()
+        {
+            string removeDirecotryCommand = "rm -r " + Directory.GetCurrentDirectory();
+            ProcessHandler.Run(PrepareCommand(removeDirecotryCommand));
+        }
     }
 }
