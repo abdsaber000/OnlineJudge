@@ -33,7 +33,7 @@
             <td>
                 <a asp-controller="Problems" asp-action="Details" asp-route-id="@item.ProblemId">@Html.DisplayFor(modelItem => item.ProblemTitle)</a>
             </td>
-            <td>
+            <td class ="vredict" style="font-weight:bold">
                 @Html.DisplayFor(modelItem => item.Vredict)
             </td>
             <td>
@@ -44,3 +44,5 @@
 }
     </tbody>
 </table>
+
+<script src="~/js/submissions_details.js"></script>
