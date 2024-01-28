@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlineJudge.Data;
 using OnlineJudge.Models;
+using OnlineJudge.ViewModels;
 
 namespace OnlineJudge.Controllers
 {
@@ -39,8 +41,13 @@ namespace OnlineJudge.Controllers
             {
                 return NotFound();
             }
-
-            return View(problem);
+            ProblemViewModel result = new ProblemViewModel()
+            {
+                Id = problem.Id,
+                Title = problem.Title,
+                Statement = problem.Statement
+            };
+            return View(result);
         }
 
         // GET: Problems/Create
@@ -54,6 +61,7 @@ namespace OnlineJudge.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create(Problem problem)
         {
             if (ModelState.IsValid)
@@ -66,6 +74,7 @@ namespace OnlineJudge.Controllers
         }
 
         // GET: Problems/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,6 +95,7 @@ namespace OnlineJudge.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Statement")] Problem problem)
         {
             if (id != problem.Id)
@@ -117,6 +127,7 @@ namespace OnlineJudge.Controllers
         }
 
         // GET: Problems/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -137,6 +148,7 @@ namespace OnlineJudge.Controllers
         // POST: Problems/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var problem = await _context.Problem.FindAsync(id);

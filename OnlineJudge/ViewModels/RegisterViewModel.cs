@@ -19,5 +19,10 @@ namespace OnlineJudge.ViewModels
             ErrorMessage = "Password doesn't match confirm password.")]
         public string ConfirmPassword { get; set; }
 
+        [Required]
+        public string Handle { get; set; }
+
+
+
     }
 }

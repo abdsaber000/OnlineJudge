@@ -12,5 +12,8 @@ namespace OnlineJudge.Models
         public int ProblemId { get; set; }
         public string Code { get; set; }
         public string Vredict { get; set; } = "In queue";
+
+        [ForeignKey("ApplicatoinUser")]
+        public string UserId { get; set; }
     }
 }

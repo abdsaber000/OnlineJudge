@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using OnlineJudge.Data;
 using OnlineJudge.Models;
 using OnlineJudge.Services;
+using OnlineJudge.ViewModels;
 
 namespace OnlineJudge.Controllers
 {
@@ -27,19 +28,34 @@ namespace OnlineJudge.Controllers
            
             var submissions = _context.Submission.ToList();
             var problems = _context.Problem.ToList();
-
+            var users = _context.Users.ToList();
+            /*
             var result = submissions.Join(problems,
                 submission => submission.ProblemId,
                 problem => problem.Id,
                 (submission, problem) =>
-                new SubmissionViewModel
-                {
-                    Id = submission.Id,
-                    ProblemId = submission.ProblemId,
-                    ProblemTitle = problem.Title,
-                    Vredict = submission.Vredict,
+                
+                    
+                    new SubmissionViewModel
+                    {
+                        Id = submission.Id,
+                        ProblemId = submission.ProblemId,
+                        ProblemTitle = problem.Title,
+                        Vredict = submission.Vredict,
+                    }
+                 ) ;*/
 
-                });
+            var result = from submission in submissions
+                     join problem in problems on submission.ProblemId equals problem.Id
+                     join user in users on submission.UserId equals user.Id
+                     select new SubmissionViewModel
+                     {
+                         Id = submission.Id,
+                         ProblemId = submission.ProblemId,
+                         ProblemTitle = problem.Title,
+                         Vredict = submission.Vredict,
+                         Handle = user.Handle
+                     };
             return View(result);
         }
 
@@ -105,6 +121,25 @@ namespace OnlineJudge.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(submission);
+        }
+
+        public async Task<IActionResult> CreateCode(ProblemViewModel problem)
+        {
+
+            Submission submission = new Submission()
+            {
+                ProblemId = problem.Id,
+                Code = problem.code,
+                UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)
+            };
+            
+            submission.Vredict = "In queue";
+            RunSubmission(ref submission);
+            _context.Add(submission);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+            
+            
         }
 
         // GET: Submissions/Edit/5

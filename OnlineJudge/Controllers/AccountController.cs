@@ -1,16 +1,17 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using OnlineJudge.Models;
 using OnlineJudge.ViewModels;
 
 namespace OnlineJudge.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<IdentityUser> userManager;
-        private readonly SignInManager<IdentityUser> signInManager;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
 
-        public AccountController(UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+        public AccountController(UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -33,8 +34,10 @@ namespace OnlineJudge.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser
-                { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser
+                { UserName = model.Email, 
+                    Email = model.Email , 
+                    Handle = model.Handle };
 
                 var result = await userManager.CreateAsync(
                     user , model.Password);
@@ -61,7 +64,8 @@ namespace OnlineJudge.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model,
+            string? returnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -70,6 +74,10 @@ namespace OnlineJudge.Controllers
 
                 if (result.Succeeded)
                 {
+                    if (!string.IsNullOrEmpty(returnUrl))
+                    {
+                        return LocalRedirect(returnUrl);
+                    }
                     return RedirectToAction("Index", "Home");
                 }
 
