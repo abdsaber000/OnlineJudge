@@ -1,4 +1,6 @@
 ﻿@model OnlineJudge.ViewModels.ProblemViewModel
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
 
 @{
     ViewData["Title"] = "Details";
@@ -34,7 +36,38 @@
         <input type="submit"  value="Submit"  class="btn btn-primary"/>
     </form>
 </div>
+
+<br />
+
+@if(SignInManager.IsSignedIn(User))
+{
+    <h3>Your Submissions</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Vredict</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var submission in Model.submissions)
+            {
+                <tr>
+                    <td class="vredict" style="font-weight:bold;">@submission.Vredict</td>
+                    <td>
+                        <a asp-action="Details"
+                           asp-controller="Submissions"
+                           asp-route-id="@submission.Id">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+<script src="~/js/submissions_details.js"></script>

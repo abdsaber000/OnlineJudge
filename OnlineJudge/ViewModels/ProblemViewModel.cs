@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using OnlineJudge.Models;
+using System.Collections;
+using System.ComponentModel.DataAnnotations;
 
 namespace OnlineJudge.ViewModels
 {
@@ -9,6 +11,6 @@ namespace OnlineJudge.ViewModels
         public string Title { get; set; }
         public string code { get; set; }
 
-
+        public List<Submission> submissions { get; set; }
     }
 }

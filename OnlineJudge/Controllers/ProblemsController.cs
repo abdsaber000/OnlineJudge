@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -47,6 +48,12 @@ namespace OnlineJudge.Controllers
                 Title = problem.Title,
                 Statement = problem.Statement
             };
+            var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var submissionsByUser = _context.Submission
+                .Where(submission => submission.UserId == UserId 
+                    && submission.ProblemId == problem.Id).ToList();
+            result.submissions = submissionsByUser;
             return View(result);
         }
 
