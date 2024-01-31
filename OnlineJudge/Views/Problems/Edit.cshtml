@@ -14,6 +14,11 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
+                <label asp-for="ContestId" class="control-label"></label>
+                <input asp-for="ContestId" class="form-control" />
+                <span asp-validation-for="ContestId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
@@ -22,6 +27,22 @@
                 <label asp-for="Statement" class="control-label"></label>
                 <input asp-for="Statement" class="form-control" />
                 <span asp-validation-for="Statement" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SolutionCode" class="control-label"></label>
+                <textarea type="text" asp-for="SolutionCode" class="form-control"> </textarea>
+                <span asp-validation-for="SolutionCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InputTest" class="control-label"></label>
+                <textarea type="text" asp-for="InputTest" class="form-control"> </textarea>
+
+                <span asp-validation-for="InputTest" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExpectedOutput" class="control-label"></label>
+                <textarea type="text" asp-for="ExpectedOutput" class="form-control"> </textarea>
+                <span asp-validation-for="ExpectedOutput" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

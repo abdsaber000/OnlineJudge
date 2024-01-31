@@ -64,8 +64,7 @@ namespace OnlineJudge.Controllers
         }
 
         // POST: Problems/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -98,12 +97,11 @@ namespace OnlineJudge.Controllers
         }
 
         // POST: Problems/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Statement")] Problem problem)
+        public async Task<IActionResult> Edit(int id,  Problem problem)
         {
             if (id != problem.Id)
             {

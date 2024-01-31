@@ -106,8 +106,7 @@ namespace OnlineJudge.Controllers
 
 
         // POST: Submissions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Submission submission)
@@ -137,8 +136,10 @@ namespace OnlineJudge.Controllers
             RunSubmission(ref submission);
             _context.Add(submission);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-            
+            /*
+            return RedirectToAction("Details" 
+                , "Problems" , new {id = problem.Id});*/
+            return RedirectToAction("Index");
             
         }
 
@@ -159,9 +160,7 @@ namespace OnlineJudge.Controllers
         }
 
         // POST: Submissions/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Submission submission)
         {

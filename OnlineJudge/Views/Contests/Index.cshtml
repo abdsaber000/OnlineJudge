@@ -1,0 +1,75 @@
+﻿@model IEnumerable<OnlineJudge.ViewModels.ContestsViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndDate)
+            </th>
+            <th>
+                Registeration
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        var Id = item.Id;
+        <tr>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+                <form method="post">
+                <input asp-for="@Id" value="@item.Id" hidden/>
+                @if (!item.IsRegistered)
+                {
+
+                <td>
+                    <input asp-controller="Contests"
+                            asp-action="Register"
+                            class="btn btn-primary"
+                            value="Register"
+                            type="submit" />
+                </td>
+                }
+                else
+                {
+                <td>
+                    <input asp-controller="Contests"
+                            asp-action="UnRegister"
+                            class="btn btn-danger"
+                            value="Unregister"
+                            type="submit" />
+                </td>
+                }
+            </form>
+            
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

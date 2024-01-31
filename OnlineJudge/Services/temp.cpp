@@ -11,6 +11,6 @@ int main(){
     while(tt--){
         int a , b;
         cin >> a >> b;
-        cout << a + b << "\n";
+        cout << a * b << "\n";
     }
 }

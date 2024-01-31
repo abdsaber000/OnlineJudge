@@ -12,5 +12,7 @@ namespace OnlineJudge.Data
         }
         public DbSet<Problem> Problem { get; set; } = default!;
         public DbSet<OnlineJudge.Models.Submission> Submission { get; set; } = default!;
+        public DbSet<OnlineJudge.Models.Contest> Contest { get; set; } = default!;
+        public DbSet<OnlineJudge.Models.ContestRegister> ContestRegister { get; set; } = default!;
     }
 }
