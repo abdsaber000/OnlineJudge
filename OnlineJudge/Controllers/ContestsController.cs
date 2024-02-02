@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlineJudge.Data;
+using OnlineJudge.Data.Migrations;
 using OnlineJudge.Models;
 using OnlineJudge.ViewModels;
 
@@ -69,6 +70,109 @@ namespace OnlineJudge.Controllers
             var problems = await _context.Problem
                 .Where(problem => problem.ContestId == ContestId).ToListAsync();
             return View(problems);
+        }
+
+        [Route("Contest/{ContestId}/Standing", Name = "Standing")]
+        public async Task<IActionResult> Standing(int ContestId)
+        {
+            var submissions = await _context.Submission
+                .Where(submission => submission.ContestId == ContestId)
+                .ToListAsync();
+
+            var participants = await _context.ContestRegister
+                .Where(register => register.ContestId == ContestId)
+                .Select(register => register.UserId)
+                .ToListAsync();
+
+            var problems = await _context.Problem
+                .Where(problem => problem.ContestId == ContestId)
+                .ToListAsync();
+
+            List<StandingRowViewModel> Standing =
+                new List<StandingRowViewModel>();
+
+            
+            
+            foreach(var participant in participants)
+            {
+                StandingRowViewModel ViewModelInContest = new StandingRowViewModel()
+                {
+                    Handle = _context.Users
+                    .FirstOrDefault(user => user.Id == participant)
+                    .Handle,
+                    IsInContestTime = true
+                    , UserSubmitCount = new List<int> ()
+                    
+                };
+
+                StandingRowViewModel ViewModelInPractice = new StandingRowViewModel()
+                {
+                    Handle = _context.Users
+                    .FirstOrDefault(user => user.Id == participant)
+                    .Handle,
+                    IsInContestTime = false
+                    ,
+                    UserSubmitCount = new List<int>()
+                };
+                bool didUserMadeSubmitInContest = false;
+                bool didUserMadeSubmissionAfterContest = false;
+                foreach (var problem in problems)
+                {
+                    bool isAccepted = false;
+                    int counterOfSubmissionsInContest = 0;
+                    int counterOfSubmisionsAfterContest = 0;
+                    foreach (var submission in submissions)
+                    {
+                        if (submission.UserId == participant
+                            && problem.Id == submission.ProblemId
+                            )
+                        {
+                            if (submission.IsInContestTime)
+                            {
+                                counterOfSubmissionsInContest++;
+
+                                //Handle this later
+                                if (submission.Vredict == "Accepted")
+                                {
+                                    isAccepted = true;
+                                }
+                            }
+                            else
+                            {
+                                counterOfSubmisionsAfterContest++;
+                            }
+                            
+                        }
+                    }
+                    if (counterOfSubmissionsInContest > 0)
+                    {
+                        didUserMadeSubmitInContest = true;
+                    }
+                    if(counterOfSubmisionsAfterContest > 0)
+                    {
+                        didUserMadeSubmissionAfterContest = true;
+                    }
+
+                    ViewModelInContest
+                        .UserSubmitCount
+                        .Add(counterOfSubmissionsInContest);
+                    ViewModelInPractice
+                        .UserSubmitCount
+                        .Add(counterOfSubmisionsAfterContest);
+                }
+
+                if (didUserMadeSubmitInContest)
+                {
+                    Standing.Add(ViewModelInContest);
+                }
+
+                if (didUserMadeSubmissionAfterContest)
+                {
+                    Standing.Add(ViewModelInPractice);
+                }
+            }
+
+            return View(Standing);
         }
 
         // GET: Contests/Create

@@ -42,7 +42,7 @@
             </td>
                 <form method="post">
                 <input asp-for="@Id" value="@item.Id" hidden/>
-                @if (!item.IsRegistered)
+                @if (!item.IsRegistered && item.IsRegisterValid())
                 {
 
                 <td>
@@ -53,7 +53,7 @@
                             type="submit" />
                 </td>
                 }
-                else
+                else if(item.IsRegisterValid())
                 {
                 <td>
                     <input asp-controller="Contests"
@@ -61,7 +61,11 @@
                             class="btn btn-danger"
                             value="Unregister"
                             type="submit" />
-                </td>
+                        </td>
+                    }
+                else
+                {
+                    <td>Registration Closed</td>
                 }
             </form>
             

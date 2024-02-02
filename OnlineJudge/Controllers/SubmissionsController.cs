@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization.DataContracts;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -114,6 +115,10 @@ namespace OnlineJudge.Controllers
             if (ModelState.IsValid)
             {
                 submission.Vredict = "In queue";
+                submission.ContestId = _context.Problem
+                    .FirstOrDefault(problem => 
+                        problem.Id == submission.ProblemId).ContestId;
+
                 RunSubmission(ref submission);
                 _context.Add(submission);
                 await _context.SaveChangesAsync();
@@ -131,8 +136,22 @@ namespace OnlineJudge.Controllers
                 Code = problem.code,
                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)
             };
-            
+
+            var _problem = _context.Problem
+                .FirstOrDefault(p => p.Id == problem.Id);
+
+            if(_problem != null)
+            {
+                var contest = _context.Contest
+                    .FirstOrDefault(contest => contest.Id == _problem.ContestId);
+                if(contest != null)
+                    submission.IsInContestTime = contest.IsSubmitInContestTime();
+            }
+
             submission.Vredict = "In queue";
+            submission.ContestId = _context.Problem
+                    .FirstOrDefault(problem =>
+                        problem.Id == submission.ProblemId).ContestId;
             RunSubmission(ref submission);
             _context.Add(submission);
             await _context.SaveChangesAsync();

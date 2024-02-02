@@ -10,9 +10,14 @@ namespace OnlineJudge.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
-        public bool IsRegisterValid()
+        public bool CanSubmit()
         {
-            return DateTime.Now < EndDate;
+            return DateTime.Now >= StartDate;
+        }
+
+        public bool IsSubmitInContestTime()
+        {
+            return CanSubmit() && DateTime.Now < EndDate;
         }
     }
 }

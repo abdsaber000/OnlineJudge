@@ -11,6 +11,7 @@ namespace OnlineJudge.Models
 
         public int ProblemId { get; set; }
         public int ContestId {get; set;}
+        public bool IsInContestTime { get; set; }
         public string Code { get; set; }
         public string Vredict { get; set; } = "In queue";
 

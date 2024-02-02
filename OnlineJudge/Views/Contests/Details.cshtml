@@ -6,7 +6,8 @@
 
 <h1>Details</h1>
 @{
-    var problemsUrl = Model.Id + "/Problems"; 
+    var problemsUrl = Model.Id + "/Problems";
+    var standingUrl = Model.Id + "/Standing";
 }
 <div class="container">
     <h4>Contest</h4>
@@ -43,7 +44,7 @@
         class="btn btn-primary">Show Problems</a>
 
     <a 
-        href="@problemsUrl"
+        href="@standingUrl"
         class="btn btn-primary">Standing</a>
 
     <a href="@problemsUrl"
