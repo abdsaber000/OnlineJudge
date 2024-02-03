@@ -325,6 +325,17 @@ namespace OnlineJudge.Controllers
             return RedirectToAction("Index", "Contests");
         }
 
+        [Route("Contest/{ContestId}/Submissions", Name = "Submissions")]
+
+        // GET: Contest/id/Submissions
+        public  IActionResult Submissions(int ContestId)
+        {
+            
+            return View(SubmissionsController
+                    .GetAllSubmissions(_context , ContestId));
+        }
+
+
         private bool ContestExists(int id)
         {
             return _context.Contest.Any(e => e.Id == id);

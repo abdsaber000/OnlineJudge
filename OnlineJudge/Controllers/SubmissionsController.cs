@@ -23,41 +23,37 @@ namespace OnlineJudge.Controllers
             _context = context;
         }
 
+        public static IEnumerable<SubmissionViewModel> GetAllSubmissions(
+            ApplicationDbContext context , int ContestId  = 0)
+        {
+            var submissions = context.Submission.ToList();
+            var problems = context.Problem.ToList();
+            var users = context.Users.ToList();
+            var result = from submission in submissions
+                         join problem in problems on submission.ProblemId equals problem.Id
+                         join user in users on submission.UserId equals user.Id
+                         select new SubmissionViewModel
+                         {
+                             Id = submission.Id,
+                             ProblemId = submission.ProblemId,
+                             ProblemTitle = problem.Title,
+                             Vredict = submission.Vredict,
+                             Handle = user.Handle,
+                             ContestId = submission.ContestId
+                         };
+            if(ContestId != 0)
+            {
+                result = result
+                    .Where(submission => submission.ContestId == ContestId);
+            }
+            return result;
+        }
+
         // GET: Submissions
         public async Task<IActionResult> Index()
         {
-           
-            var submissions = _context.Submission.ToList();
-            var problems = _context.Problem.ToList();
-            var users = _context.Users.ToList();
-            /*
-            var result = submissions.Join(problems,
-                submission => submission.ProblemId,
-                problem => problem.Id,
-                (submission, problem) =>
-                
-                    
-                    new SubmissionViewModel
-                    {
-                        Id = submission.Id,
-                        ProblemId = submission.ProblemId,
-                        ProblemTitle = problem.Title,
-                        Vredict = submission.Vredict,
-                    }
-                 ) ;*/
-
-            var result = from submission in submissions
-                     join problem in problems on submission.ProblemId equals problem.Id
-                     join user in users on submission.UserId equals user.Id
-                     select new SubmissionViewModel
-                     {
-                         Id = submission.Id,
-                         ProblemId = submission.ProblemId,
-                         ProblemTitle = problem.Title,
-                         Vredict = submission.Vredict,
-                         Handle = user.Handle
-                     };
-            return View(result);
+            
+            return View(GetAllSubmissions(_context));
         }
 
         // GET: Submissions/Details/5

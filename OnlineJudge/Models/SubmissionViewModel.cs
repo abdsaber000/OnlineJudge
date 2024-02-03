@@ -10,5 +10,6 @@ namespace OnlineJudge.Models
         public string Vredict { get; set; } = "In queue";
         public string ProblemTitle { get; set; }
         public string Handle { get; set; }
+        public int ContestId { get; set; }
     }
 }

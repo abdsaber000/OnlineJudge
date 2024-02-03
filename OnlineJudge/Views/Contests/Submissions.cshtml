@@ -1,0 +1,52 @@
+﻿@model IEnumerable<SubmissionViewModel>
+
+@{
+    ViewData["Title"] = "Contest Submissions";
+}
+
+<h1>Contest Submissions</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProblemTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vredict)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Handle)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    <a asp-controller="Problems" asp-action="Details" asp-route-id="@item.ProblemId">@Html.DisplayFor(modelItem => item.ProblemTitle)</a>
+                </td>
+                <td class="vredict" style="font-weight:bold">
+                    @Html.DisplayFor(modelItem => item.Vredict)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Handle)
+                </td>
+                <td>
+
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="~/js/submissions_details.js"></script>
