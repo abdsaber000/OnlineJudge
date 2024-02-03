@@ -6,10 +6,10 @@ namespace OnlineJudge.ViewModels
     public class StandingRowViewModel
     {
         public string Handle { get; set; }
-        public List<int> UserSubmitCount { get; set; }
+        public List<StandingCellViewModel> UserSubmitCount { get; set; }
         public bool IsInContestTime { get; set; }
 
-       public string ConvertToString(int number)
+       public static string ConvertToString(int number)
         {
             number--;
             StringBuilder result = new StringBuilder();

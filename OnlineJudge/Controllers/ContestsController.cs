@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -101,7 +102,7 @@ namespace OnlineJudge.Controllers
                     .FirstOrDefault(user => user.Id == participant)
                     .Handle,
                     IsInContestTime = true
-                    , UserSubmitCount = new List<int> ()
+                    , UserSubmitCount = new List<StandingCellViewModel> ()
                     
                 };
 
@@ -112,13 +113,14 @@ namespace OnlineJudge.Controllers
                     .Handle,
                     IsInContestTime = false
                     ,
-                    UserSubmitCount = new List<int>()
+                    UserSubmitCount = new List<StandingCellViewModel>()
                 };
                 bool didUserMadeSubmitInContest = false;
                 bool didUserMadeSubmissionAfterContest = false;
                 foreach (var problem in problems)
                 {
-                    bool isAccepted = false;
+                    bool isAcceptedInContest = false;
+                    bool isAcceptedInPractice = false;
                     int counterOfSubmissionsInContest = 0;
                     int counterOfSubmisionsAfterContest = 0;
                     foreach (var submission in submissions)
@@ -131,15 +133,18 @@ namespace OnlineJudge.Controllers
                             {
                                 counterOfSubmissionsInContest++;
 
-                                //Handle this later
                                 if (submission.Vredict == "Accepted")
                                 {
-                                    isAccepted = true;
+                                    isAcceptedInContest = true;
                                 }
                             }
                             else
                             {
                                 counterOfSubmisionsAfterContest++;
+                                if (submission.Vredict == "Accepted")
+                                {
+                                    isAcceptedInPractice = true;
+                                }
                             }
                             
                         }
@@ -155,10 +160,16 @@ namespace OnlineJudge.Controllers
 
                     ViewModelInContest
                         .UserSubmitCount
-                        .Add(counterOfSubmissionsInContest);
+                        .Add(new StandingCellViewModel { 
+                            NumberOfSubmissions = counterOfSubmissionsInContest,
+                            IsAccepted = isAcceptedInContest});
                     ViewModelInPractice
                         .UserSubmitCount
-                        .Add(counterOfSubmisionsAfterContest);
+                        .Add(new StandingCellViewModel
+                        {
+                            NumberOfSubmissions = counterOfSubmisionsAfterContest,
+                            IsAccepted = isAcceptedInPractice
+                        });
                 }
 
                 if (didUserMadeSubmitInContest)
