@@ -25,7 +25,21 @@ namespace OnlineJudge.Controllers
         // GET: Problems
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Problem.ToListAsync());
+            List<Problem> problems = new List<Problem>();
+            foreach(var problem in _context.Problem)
+            {
+                var contest = await _context.Contest.FindAsync(problem.ContestId);
+                if(contest == null)
+                {
+                    problems.Add(problem);
+                    continue;
+                }
+                if(contest.EndDate < DateTime.Now)
+                {
+                    problems.Add(problem);
+                }
+            }
+            return View(problems);
         }
 
         // GET: Problems/Details/5
