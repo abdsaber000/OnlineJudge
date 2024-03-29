@@ -25,21 +25,45 @@ namespace OnlineJudge.Controllers
         // GET: Problems
         public async Task<IActionResult> Index()
         {
-            List<Problem> problems = new List<Problem>();
+            List<AllProblemsViewModel> model = new List<AllProblemsViewModel>();
             foreach(var problem in _context.Problem)
             {
                 var contest = await _context.Contest.FindAsync(problem.ContestId);
+                bool canShowProblem = false;
                 if(contest == null)
                 {
-                    problems.Add(problem);
-                    continue;
-                }
-                if(contest.EndDate < DateTime.Now)
+                    canShowProblem = true;
+                }else if(contest.EndDate < DateTime.Now)
                 {
-                    problems.Add(problem);
+                    canShowProblem = true;
+                }
+
+                if (canShowProblem)
+                {
+                    int NumberOfAcceptedSubmissions = 0,
+                        NumberOfTotalSubmissions = 0;
+                    foreach (var submission in _context.Submission)
+                    {
+                        if (submission.ProblemId == problem.Id)
+                        {
+                            NumberOfTotalSubmissions++;
+                            if (submission.Vredict == "Accepted")
+                                NumberOfAcceptedSubmissions++;
+                        }
+                    }
+                    var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    bool canEditOrDelete = UserId == problem.AuthorId;
+                    model.Add(new AllProblemsViewModel
+                    {
+                        Id = problem.Id,
+                        Title = problem.Title,
+                        CanEditOrDelete = canEditOrDelete,
+                        NumberOfAcceptedSubmissions = NumberOfAcceptedSubmissions,
+                        NumberOfTotalSubmissions = NumberOfTotalSubmissions
+                    });
                 }
             }
-            return View(problems);
+            return View(model);
         }
 
         // GET: Problems/Details/5
@@ -84,6 +108,8 @@ namespace OnlineJudge.Controllers
         [Authorize]
         public async Task<IActionResult> Create(Problem problem)
         {
+            problem.AuthorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ModelState.Remove("AuthorId");
             if (ModelState.IsValid)
             {
                 _context.Add(problem);

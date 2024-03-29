@@ -9,6 +9,7 @@ namespace OnlineJudge.Models
         public int Id { get; set; }
 
         public int ContestId { get; set; }
+        public string AuthorId { get; set; }
         public string Title { get; set; }
         public string Statement { get; set; }
         public string SolutionCode { get; set; }
