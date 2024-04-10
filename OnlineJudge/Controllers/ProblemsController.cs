@@ -133,6 +133,11 @@ namespace OnlineJudge.Controllers
             {
                 return NotFound();
             }
+            var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (UserId != problem.AuthorId)
+            {
+                return NotFound();
+            }
             return View(problem);
         }
 
@@ -183,6 +188,12 @@ namespace OnlineJudge.Controllers
             var problem = await _context.Problem
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (problem == null)
+            {
+                return NotFound();
+            }
+
+            var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (UserId != problem.AuthorId)
             {
                 return NotFound();
             }

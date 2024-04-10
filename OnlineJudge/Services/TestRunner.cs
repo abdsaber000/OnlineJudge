@@ -14,7 +14,7 @@ namespace OnlineJudge.Services
             this.code = code;
             this.inputTest = inputTest;
             this.expectedOutput = expectedOutput;
-            AppendRandomNumber();
+            //AppendRandomNumber();
         }
         private void AppendRandomNumber()
         {
