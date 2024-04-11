@@ -24,12 +24,12 @@
         </tr>
     </thead>
 
-    <tbody>
+    <tbody> 
+        @foreach(var row in Model)
+        {
+            if (!row.IsInContestTime)
+                continue;
         <tr>
-            @foreach(var row in Model)
-            {
-                if (!row.IsInContestTime)
-                    continue;
 
                 <td>@row.Handle</td>
                 @foreach(var col in row.UserSubmitCount)
@@ -54,8 +54,8 @@
                         }
                     }
                 }
-            }
         </tr>
+        }
     </tbody>
 
     
@@ -83,11 +83,11 @@
     </thead>
 
     <tbody>
+        @foreach (var row in Model)
+        {
+            if (row.IsInContestTime)
+                continue;
         <tr>
-            @foreach (var row in Model)
-            {
-                if (row.IsInContestTime)
-                    continue;
 
                 <td>@row.Handle</td>
                 @foreach (var col in row.UserSubmitCount)
@@ -112,8 +112,8 @@
                         }
                     }
                 }
-            }
         </tr>
+        }
     </tbody>
 
 

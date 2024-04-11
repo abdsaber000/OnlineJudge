@@ -80,10 +80,13 @@ namespace OnlineJudge.Controllers
                 .Where(submission => submission.ContestId == ContestId)
                 .ToListAsync();
 
-            var participants = await _context.ContestRegister
-                .Where(register => register.ContestId == ContestId)
-                .Select(register => register.UserId)
-                .ToListAsync();
+            //var participants = await _context.ContestRegister
+            //    .Where(register => register.ContestId == ContestId)
+            //    .Select(register => register.UserId)
+            //    .ToListAsync();
+
+            var participants = await _context.Users
+                .Select(participant => participant.Id).ToListAsync();
 
             var problems = await _context.Problem
                 .Where(problem => problem.ContestId == ContestId)
