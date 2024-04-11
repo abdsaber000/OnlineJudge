@@ -74,12 +74,22 @@ namespace OnlineJudge.Controllers
                 return NotFound();
             }
 
+
             var problem = await _context.Problem
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (problem == null)
             {
                 return NotFound();
             }
+            var contest = await _context.Contest
+                .FirstOrDefaultAsync(m => m.Id == problem.ContestId);
+
+            if (contest != null && !contest.CanSubmit())
+            {
+                return NotFound();
+            }
+            
+
             ProblemViewModel result = new ProblemViewModel()
             {
                 Id = problem.Id,
