@@ -8,6 +8,7 @@ namespace OnlineJudge.Models
         [Key]
         public int Id { get; set; }
         [ForeignKey("ApplicationUser")]
+        [MaxLength(450)]
         public string UserId { get; set; }
         [ForeignKey("Contest")]
         public int ContestId { get; set; }

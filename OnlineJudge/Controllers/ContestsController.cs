@@ -69,9 +69,8 @@ namespace OnlineJudge.Controllers
         [Route("Contest/{ContestId}/Problems" , Name ="ProblemsInContest")]
         public async Task<IActionResult> ProblemsInContest(int ContestId)
         {
-            var problems = await _context.Problem
-                .Where(problem => problem.ContestId == ContestId).ToListAsync();
-            return View(problems);
+           
+            return View(await ProblemsController.GetProblems(_context , User.FindFirstValue(ClaimTypes.NameIdentifier) , ContestId));
         }
 
         [Route("Contest/{ContestId}/Standing", Name = "Standing")]

@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using OnlineJudge.Data;
 using OnlineJudge.Models;
 using OnlineJudge.ViewModels;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace OnlineJudge.Controllers
 {
@@ -22,20 +23,23 @@ namespace OnlineJudge.Controllers
             _context = context;
         }
 
-        // GET: Problems
-        public async Task<IActionResult> Index()
+        public static async Task<List<AllProblemsViewModel>> GetProblems(ApplicationDbContext _context, string UserId , int _contestId = 0)
         {
             List<AllProblemsViewModel> model = new List<AllProblemsViewModel>();
-            foreach(var problem in _context.Problem)
+            foreach (var problem in _context.Problem)
             {
                 var contest = await _context.Contest.FindAsync(problem.ContestId);
                 bool canShowProblem = false;
-                if(contest == null)
+                if (contest == null)
                 {
                     canShowProblem = true;
-                }else if(contest.EndDate < DateTime.Now)
+                }
+                else if (_contestId == 0 && contest.EndDate < DateTime.Now )
                 {
                     canShowProblem = true;
+                }else if (_contestId != 0)
+                {
+                    canShowProblem = problem.ContestId == _contestId;
                 }
 
                 if (canShowProblem)
@@ -51,7 +55,6 @@ namespace OnlineJudge.Controllers
                                 NumberOfAcceptedSubmissions++;
                         }
                     }
-                    var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                     bool canEditOrDelete = UserId == problem.AuthorId;
                     model.Add(new AllProblemsViewModel
                     {
@@ -63,7 +66,13 @@ namespace OnlineJudge.Controllers
                     });
                 }
             }
-            return View(model);
+            return model;
+        }
+        // GET: Problems
+        public async Task<IActionResult> Index()
+        {
+            
+            return View(await GetProblems(_context, User.FindFirstValue(ClaimTypes.NameIdentifier)));
         }
 
         // GET: Problems/Details/5
@@ -126,9 +135,16 @@ namespace OnlineJudge.Controllers
             ModelState.Remove("AuthorId");
             if (ModelState.IsValid)
             {
-                _context.Add(problem);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    _context.Add(problem);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+
+                } catch (Exception)
+                {
+                    ModelState.AddModelError("", "Invalid Contest Id");
+                }
             }
             return View(problem);
         }

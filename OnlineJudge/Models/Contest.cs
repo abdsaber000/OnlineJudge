@@ -10,8 +10,10 @@ namespace OnlineJudge.Models
         public string Name { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        [ForeignKey("ApplicationUser")]
+        [ForeignKey("AuthorId")]
+        [MaxLength(450)]
         public string AuthorId { get; set; }
+       // public ApplicationUser ApplicationUser { get; set; }  
         public bool CanSubmit()
         {
             return DateTime.Now >= StartDate;

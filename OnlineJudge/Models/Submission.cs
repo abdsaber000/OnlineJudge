@@ -19,6 +19,7 @@ namespace OnlineJudge.Models
         public DateTime SubmitTime { get; set; } = DateTime.Now;
 
         [ForeignKey("ApplicationUser")]
+        [MaxLength(450)]
         public string UserId { get; set; }
     }
 }
