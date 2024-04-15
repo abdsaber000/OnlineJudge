@@ -247,7 +247,9 @@ namespace OnlineJudge.Controllers
             {
                 return NotFound();
             }
-
+            
+            contest.AuthorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ModelState.Remove("AuthorId");
             if (ModelState.IsValid)
             {
                 try
