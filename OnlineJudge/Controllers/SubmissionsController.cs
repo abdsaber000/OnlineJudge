@@ -32,6 +32,7 @@ namespace OnlineJudge.Controllers
             var result = from submission in submissions
                          join problem in problems on submission.ProblemId equals problem.Id
                          join user in users on submission.UserId equals user.Id
+                         orderby submission.Id descending
                          select new SubmissionViewModel
                          {
                              Id = submission.Id,
@@ -70,7 +71,10 @@ namespace OnlineJudge.Controllers
             {
                 return NotFound();
             }
-
+            if(submission.UserId != User.FindFirstValue(ClaimTypes.NameIdentifier))
+            {
+                return NotFound();
+            }
             return View(submission);
         }
 

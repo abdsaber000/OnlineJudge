@@ -40,7 +40,8 @@ namespace OnlineJudge.Controllers
                     Name=contest.Name,
                     StartDate=contest.StartDate,
                     EndDate=contest.EndDate,
-                    IsRegistered=DidUserRegister(contest.Id)
+                    IsRegistered=DidUserRegister(contest.Id),
+                    CanEditOrDelete = contest.AuthorId == User.FindFirstValue(ClaimTypes.NameIdentifier)
                 });
             }
             return View(result);
@@ -200,6 +201,8 @@ namespace OnlineJudge.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create( Contest contest)
         {
+            contest.AuthorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ModelState.Remove("AuthorId");
             if (ModelState.IsValid)
             {
                 _context.Add(contest);
@@ -212,16 +215,25 @@ namespace OnlineJudge.Controllers
         // GET: Contests/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (id == null)
             {
                 return NotFound();
             }
 
             var contest = await _context.Contest.FindAsync(id);
+                   
             if (contest == null)
             {
                 return NotFound();
             }
+
+            if(userId != contest.AuthorId)
+            {
+                return NotFound();
+            }
+
+
             return View(contest);
         }
 
@@ -273,7 +285,11 @@ namespace OnlineJudge.Controllers
             {
                 return NotFound();
             }
-
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if(userId != contest.AuthorId)
+            {
+                return NotFound();
+            }
             return View(contest);
         }
 
@@ -317,6 +333,14 @@ namespace OnlineJudge.Controllers
 
             if (DidUserRegister(contest.Id))
             {
+                var _contest = await _context.Contest
+                    .FirstOrDefaultAsync(m => m.Id == contest.Id);
+                if(_contest != null)
+                {
+                    // user can't unregister after contest started
+                    if (_contest.CanSubmit())
+                        return NotFound();
+                }
                 var register = await _context.ContestRegister
                     .FirstOrDefaultAsync(register => 
                     register.UserId == UserId 

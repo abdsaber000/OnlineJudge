@@ -9,7 +9,7 @@ namespace OnlineJudge.ViewModels
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public bool IsRegistered { get; set; }
-
+        public bool CanEditOrDelete { get; set; }
         public bool IsRegisterValid()
         {
             return DateTime.Now < EndDate;

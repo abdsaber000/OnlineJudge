@@ -81,12 +81,16 @@ namespace OnlineJudge.Controllers
             {
                 return NotFound();
             }
-            var contest = await _context.Contest
-                .FirstOrDefaultAsync(m => m.Id == problem.ContestId);
-
-            if (contest != null && !contest.CanSubmit())
+            
+            if(problem.AuthorId != User.FindFirstValue(ClaimTypes.NameIdentifier))
             {
-                return NotFound();
+                var contest = await _context.Contest
+                    .FirstOrDefaultAsync(m => m.Id == problem.ContestId);
+
+                if (contest != null && !contest.CanSubmit())
+                {
+                    return NotFound();
+                }
             }
             
 

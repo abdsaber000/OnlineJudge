@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<OnlineJudge.ViewModels.ContestsViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Contests";
 }
 
-<h1>Index</h1>
+<h1>Contests</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -68,11 +68,14 @@
                     <td>Registration Closed</td>
                 }
             </form>
-            
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
+                @if (item.CanEditOrDelete)
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                }
+               
         </tr>
 }
     </tbody>
