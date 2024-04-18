@@ -19,7 +19,7 @@ This online judge has the simple features that's found in every online judge:
 - We don't support taking input or output from standard streams, we use files.
 
 ## Database Diagram
-![Database Diagram](Database\ Diagram.png)
+![Database Diagram](Database_Diagram.png)
 ## Screenshots
 Register
 ![register](project_imgs/register.png)
