@@ -12,8 +12,8 @@ using OnlineJudge.Data;
 namespace OnlineJudge.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240415191148_submission_foreignkeys")]
-    partial class submission_foreignkeys
+    [Migration("20240416211101_last_migration")]
+    partial class last_migration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -5,7 +5,7 @@
 namespace OnlineJudge.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class addforeignkeys : Migration
+    public partial class last_migration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -30,7 +30,7 @@ namespace OnlineJudge.Controllers
             {
                 var contest = await _context.Contest.FindAsync(problem.ContestId);
                 bool canShowProblem = false;
-                if (contest == null)
+                if (_contestId == 0 && contest == null)
                 {
                     canShowProblem = true;
                 }
