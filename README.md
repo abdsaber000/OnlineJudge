@@ -18,8 +18,11 @@ This online judge has the simple features that's found in every online judge:
 - Currently, the online judge supports only C/C++. In the future, we plan to support multiple programming languages.
 - We don't support taking input or output from standard streams, we use files.
 
+
 ## Database Diagram
 ![Database Diagram](Database_Diagram.png)
+
+
 ## Screenshots
 Register
 ![register](project_imgs/register.png)
@@ -29,4 +32,46 @@ Login
 
 Home Page
 ![home page](project_imgs/home_page.png)
+
+Contest Home
+![contest home](project_imgs/contest_home.png)
+
+Create Contest
+![create contest](project_imgs/create_contest.png)
+
+Contest Details
+![create contest](project_imgs/contest_details.png)
+
+Edit Contest
+![edit contest](project_imgs/contest_edit.png)
+
+Delete Contest
+![delete contest](project_imgs/contest_delete.png)
+
+Problems Home
+![problems home](project_imgs/problems_home.png)
+
+Create Problem
+![home page](project_imgs/problems_create.png)
+
+Problem Details
+![home page](project_imgs/problems_details.png)
+
+Edit Problem
+![home page](project_imgs/problems_edit.png)
+
+
+Problems In Contest
+![home page](project_imgs/problems_in_contest.png)
+
+Standing
+![home page](project_imgs/standing.png)
+
+Submissions
+![home page](project_imgs/submissions.png)
+
+Submissions
+![home page](project_imgs/submission_details.png)
+
+
 
