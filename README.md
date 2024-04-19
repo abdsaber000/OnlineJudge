@@ -10,7 +10,7 @@ This online judge has the simple features that's found in every online judge:
   (notice that user can't add a problem to a contest with id that he didn't make).
 - User can register/unregister in contest and participate (notice that once contest started, user can't unregister).
 - User can make a submit in contest. Submission can be made in the problem page (in this case user only provide the code)
-  or in main submissions page (in this case user should provive the code and the problem id).
+  or in main submissions page (in this case user should provide the code and the problem id).
 - User can only open view his submissions.
 - During contest problems don't appear in problem set page , but only in contest page.
   After the contest time end the problems appear in problem set page.
@@ -18,12 +18,22 @@ This online judge has the simple features that's found in every online judge:
 - Currently, the online judge supports only C/C++. In the future, we plan to support multiple programming languages.
 - We don't support taking input or output from standard streams, we use files.
 
+## Technologies
+- C#
+- ASP.NET Core 8.1
+- MSSQL Server
+- Identity Framework
+- HTML, CSS, Java Script, Bootstrap
 
 ## Database Diagram
 ![Database Diagram](Database_Diagram.png)
 
 
 ## Screenshots
+<details>
+<summary>Click to toggle Screenshots</summary>
+
+  
 Register
 ![register](project_imgs/register.png)
 
@@ -73,5 +83,5 @@ Submissions
 Submissions
 ![home page](project_imgs/submission_details.png)
 
-
+</details>
 
